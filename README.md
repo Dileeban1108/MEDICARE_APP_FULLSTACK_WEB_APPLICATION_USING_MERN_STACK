@@ -1,7 +1,7 @@
 # Medicare App
 
 A medical application built with the MERN stack.
-
+(Final source codes are in the branch_1 branch)
 ## Features
 - User authentication and authorization
 - Manage patient records, appointments, and doctors
