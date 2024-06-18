@@ -1,16 +1,38 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import "../styles/diseasePopup.css";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const DiseasePopup = ({ onClose }) => {
   const [searchTerm, setSearchTerm] = useState("");
   const [diseases, setDiseases] = useState([]);
   const [filteredDiseases, setFilteredDiseases] = useState([]);
+  const [userRole, setUserRole] = useState(null);
 
+  useEffect(() => {
+    const fetchDoctorDetails = async () => {
+      try {
+        const userinfo = JSON.parse(localStorage.getItem("userinfo"));
+        const email = userinfo?.email;
+        if (email) {
+          const response = await axios.get(
+            `http://localhost:3001/auth/getDoctor/${email}`
+          );
+          setUserRole("doctor");
+        }
+      } catch (error) {
+        console.error("Failed to fetch doctor details", error);
+      }
+    };
+    fetchDoctorDetails();
+  }, []);
   useEffect(() => {
     const fetchDiseases = async () => {
       try {
-        const response = await axios.get("http://localhost:3001/auth/getDisease");
+        const response = await axios.get(
+          "http://localhost:3001/auth/getDisease"
+        );
         setDiseases(response.data);
         setFilteredDiseases(response.data);
       } catch (error) {
@@ -24,12 +46,29 @@ const DiseasePopup = ({ onClose }) => {
   const handleSearch = (e) => {
     const term = e.target.value.toLowerCase();
     setSearchTerm(term);
-    const filtered = diseases.filter((disease) =>
-      disease.symtems.toLowerCase().includes(term) ||
-      disease.diseasename.toLowerCase().includes(term)
+    const filtered = diseases.filter(
+      (disease) =>
+        (disease.symtems && disease.symtems.toLowerCase().includes(term)) ||
+        (disease.diseasename &&
+          disease.diseasename.toLowerCase().includes(term))
     );
     setFilteredDiseases(filtered);
-  }
+  };
+  const handleDelete = async (diseasename) => {
+    try {
+      await axios.delete(
+        `http://localhost:3001/auth/deleteDisease/${diseasename}`
+      );
+      setFilteredDiseases(
+        filteredDiseases.filter(
+          (disease) => disease.diseasename !== diseasename
+        )
+      );
+      toast.success("Successfully deleted");
+    } catch (error) {
+      toast.error("Failed to delete");
+    }
+  };
 
   return (
     <div className="popup-overlay_3">
@@ -53,10 +92,24 @@ const DiseasePopup = ({ onClose }) => {
             {filteredDiseases.length > 0 ? (
               filteredDiseases.map((disease, index) => (
                 <div key={index} className="disease-box">
-                  <h3>{disease.diseasename}</h3>
-                  <p>Symptoms: {disease.symtems}</p>
-                  <p> {disease.description}</p>
-                  <p>Treatment: {disease.treatment}</p>
+                  <div>
+                    <h3>{disease.diseasename}</h3>
+                    <p><h4>Symptoms:</h4> {disease.symtems}</p>
+                    
+                    <p> {disease.description}</p>
+                    </div>
+
+                    <p><h4>Treatment: </h4>{disease.treatment}</p>
+                  {userRole === "doctor" && (
+                    <button
+                    style={{height:"40px"
+                    }}
+                      className="delete-button"
+                      onClick={() => handleDelete(disease.diseasename)}
+                    >
+                      Delete
+                    </button>
+                  )}
                 </div>
               ))
             ) : (

@@ -51,7 +51,7 @@ const BookDoctorPage = () => {
         </div>
 
         <div className="sub-specialist-container">
-          <h1>Book a Doctor</h1>
+          <h1  style={{color:"white"}}>Book a Doctor</h1>
           <div className="specialist-container">
             {specialists.map((specialist, index) => (
               <div

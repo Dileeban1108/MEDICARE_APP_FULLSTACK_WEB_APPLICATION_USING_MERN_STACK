@@ -38,10 +38,13 @@ const SpecialistPopup = ({ specialist, onClose }) => {
         "http://localhost:3001/auth/bookDoctor",
         formData
       );
-      toast.success("Successfully booked the doctor, stay tuned, the doctor will contact you");
-      navigate("/bookdoctor");
+      if (response && response.data.success) {
+        toast.success(
+          "Successfully booked the doctor, stay tuned, the doctor will contact you"
+        );
+        navigate("/bookdoctor");
+      }
     } catch (error) {
-      console.error("Failed to book doctor:", error);
       toast.error("Failed to book. Please check your credentials.");
     }
   };

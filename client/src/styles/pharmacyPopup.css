@@ -46,11 +46,11 @@
     background-color: #003875;
   }
   
-  .health-tips-list {
+  .medicines-list {
     margin-top: 20px;
   }
   
-  .health-tip-box {
+  .medicine-box {
     padding: 10px;
     border: 1px solid #ccc;
     border-radius: 5px;
@@ -59,7 +59,7 @@
     display: flex;
     justify-content: space-between;
   }
-  .health-tip-box:hover{
+  .medicine-box:hover{
 background-color: rgba(158, 156, 154, 0.477);
   }
   

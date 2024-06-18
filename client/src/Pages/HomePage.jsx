@@ -101,7 +101,7 @@ const HomePage = () => {
       )}
       <div className="empty"></div>
       <div className="ultracontainer">
-        {userRole !== "doctor" && <ServicesPage id="services" />}
+        <ServicesPage id="services" />
         <AboutUs id="aboutus" />
         <ReviewPage id="reviews" />
         <Footer />

@@ -1,30 +1,58 @@
-import React from "react";
 import "../styles/healthTipsPopup.css";
-
-const healthTips = [
-  "Eat well",
-  "Sleep well",
-  "Drink at least 1 liter of water daily",
-  "Exercise regularly",
-  "Maintain a balanced diet",
-  "Avoid junk food",
-  "Practice mindfulness",
-  "Get regular medical checkups",
-  "Limit alcohol consumption",
-  "Quit smoking",
-  "Maintain good hygiene",
-  "Stay hydrated",
-  "Eat more fruits and vegetables",
-  "Reduce sugar intake",
-  "Get enough sunlight",
-  "Take breaks from screens",
-  "Practice good posture",
-  "Stay socially connected",
-  "Manage stress effectively",
-  "Stay active",
-];
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import axios from "axios";
+import React, { useState, useEffect } from "react";
 
 const HealthTipsPopup = ({ onClose }) => {
+  const [healthtips, setHealthtips] = useState([]);
+  const [userRole, setUserRole] = useState(null);
+
+  useEffect(() => {
+    const fetchDoctorDetails = async () => {
+      try {
+        const userinfo = JSON.parse(localStorage.getItem("userinfo"));
+        const email = userinfo?.email;
+        if (email) {
+          const response = await axios.get(
+            `http://localhost:3001/auth/getDoctor/${email}`
+          );
+          setUserRole("doctor");
+        }
+      } catch (error) {
+        console.error("Failed to fetch doctor details", error);
+      }
+    };
+
+    const fetchHealthTips = async () => {
+      try {
+        const response = await axios.get(
+          "http://localhost:3001/auth/getHealthTips"
+        );
+        setHealthtips(response.data);
+      } catch (error) {
+        console.error("Failed to fetch health tips", error);
+      }
+    };
+
+    fetchDoctorDetails();
+    fetchHealthTips();
+  }, []);
+
+  const handleDelete = async (healthtipname) => {
+    try {
+      await axios.delete(
+        `http://localhost:3001/auth/deleteHealthTip/${healthtipname}`
+      );
+      setHealthtips((prevTips) =>
+        prevTips.filter((tip) => tip.healthtipname !== healthtipname)
+      );
+      toast.success("Successfully deleted");
+    } catch (error) {
+      toast.error("Failed to delete");
+    }
+  };
+
   return (
     <div className="popup-overlay">
       <div className="popup-content_5">
@@ -35,13 +63,26 @@ const HealthTipsPopup = ({ onClose }) => {
           </button>
         </div>
         <div className="health-tips-list">
-          {healthTips.map((tip, index) => (
+          {healthtips.map((healthtip, index) => (
             <div key={index} className="health-tip-box">
-              {tip}
+              <div>
+                <h4>{healthtip.healthtipname}</h4>
+                <p>{healthtip.description}</p>
+              </div>
+              <p>Added by Dr.{healthtip.username}</p>
+              {userRole === "doctor" && (
+                <button
+                  className="delete-button"
+                  onClick={() => handleDelete(healthtip.healthtipname)}
+                >
+                  Delete
+                </button>
+              )}
             </div>
           ))}
         </div>
       </div>
+      <ToastContainer />
     </div>
   );
 };

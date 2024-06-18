@@ -1,11 +1,13 @@
 const Doctor = require("../models/Doctor");
 const Hospital = require("../models/Hospital");
 const Disease = require("../models/Disease");
+const Medicine = require("../models/Medicine");
 const HealthTip = require("../models/HealthTip");
 const BookDoctor = require("../models/BookedDocter");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const Review=require("../models/Review")
+
 const handleLogin = async (req, res) => {
   const { email, password } = req.body;
   if (!email || !password)
@@ -113,7 +115,7 @@ const updateHospital = async (req, res) => {
 
 const deleteHospital = async (req, res) => {
   try {
-    const { hospitalname } = req.body;
+    const { hospitalname } = req.params;
 
     const query = { hospitalname };
 
@@ -154,6 +156,32 @@ const handleNewDisease = async (req, res) => {
     res
       .status(200)
       .json({ success: `new Disease with ${diseasename} created` });
+  } catch (error) {
+    res.status(500).json({ error: `${error.message}` });
+  }
+};
+const handleNewMedicine = async (req, res) => {
+  const { medicinename, quantity} = req.body;
+  if (!medicinename || !quantity)
+    return res
+      .status(400)
+      .json({ message: "something is required" });
+
+  const duplicateMedicine = await Medicine.findOne({
+    medicinename: medicinename,
+  }).exec();
+  if (duplicateMedicine)
+    return res.status(409).json({ message: "medicine is already exist" });
+
+  try {
+    await Medicine.create({
+      medicinename: medicinename,
+      quantity: quantity,
+    });
+
+    res
+      .status(200)
+      .json({ success: `new Medicine with ${medicinename} created` });
   } catch (error) {
     res.status(500).json({ error: `${error.message}` });
   }
@@ -211,9 +239,8 @@ const bookDoctor = async (req, res) => {
   }).exec();
   if (duplicatePatient)
     return res.status(409).json({ message: "already exist" });
-
   try {
-    const bookDoctor = await BookDoctor.create({
+    await BookDoctor.create({
       doctorname: doctorname,
       username: username,
       email: email,
@@ -225,6 +252,19 @@ const bookDoctor = async (req, res) => {
     res.status(200).json({ success: `new Book with ${doctorname} created` });
   } catch (error) {
     res.status(500).json({ error: `${error.message}` });
+  }
+};
+
+const getReviews = async (req, res) => {
+  try {
+    const filters = req.body;
+
+    const result = await Review.find(filters);
+
+    res.status(200).json(result);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Failed to fetch" });
   }
 };
 const getPatients = async (req, res) => {
@@ -239,18 +279,6 @@ const getPatients = async (req, res) => {
     res.status(500).json({ error: "Failed to fetch" });
   }
 };
-const getReviews = async (req, res) => {
-  try {
-    const filters = req.body;
-
-    const result = await Review.find(filters);
-
-    res.status(200).json(result);
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: "Failed to fetch" });
-  }
-};
 const getPatientsByDoctorName = async (req, res) => {
   try {
     const { doctorname } = req.params;
@@ -258,19 +286,43 @@ const getPatientsByDoctorName = async (req, res) => {
 
     const query = { doctorname, ...additionalFilters };
 
-    const result = await BookDoctor.findOne(query);
+    const result = await BookDoctor.find(query); // Use find instead of findOne to get all matching documents
     res.status(200).json(result);
-
   } catch (error) {
     console.error(error);
-    res.status(500).json({ error: "Failed to fetch" });
+    res.status(500).json({ error: "Failed to fetch patients" });
   }
 };
+
 const getDisease = async (req, res) => {
   try {
     const filters = req.body;
 
     const result = await Disease.find(filters);
+
+    res.status(200).json(result);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Failed to fetch" });
+  }
+};
+const getHealthTips = async (req, res) => {
+  try {
+    const filters = req.body;
+
+    const result = await HealthTip.find(filters);
+
+    res.status(200).json(result);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Failed to fetch" });
+  }
+};
+const getMedicines = async (req, res) => {
+  try {
+    const filters = req.body;
+
+    const result = await Medicine.find(filters);
 
     res.status(200).json(result);
   } catch (error) {
@@ -301,10 +353,10 @@ const updateDisease = async (req, res) => {
 
 const deleteDisease = async (req, res) => {
   try {
-    const { diseasename } = req.body;
+    const { diseasename } = req.params;
     const query = { diseasename };
 
-    const deleteDisease = await Disease.findByOneAndDelete(query);
+    const deleteDisease = await Disease.findOneAndDelete(query);
     if (!deleteDisease) {
       return res.status(404).json({ error: "disease not found" });
     }
@@ -316,11 +368,26 @@ const deleteDisease = async (req, res) => {
 };
 const deleteHealthTip = async (req, res) => {
   try {
-    const { healthtipname } = req.body;
+    const { healthtipname } = req.params;
     const query = { healthtipname };
 
-    const deleteHealthTip = await HealthTip.findByOneAndDelete(query);
+    const deleteHealthTip = await HealthTip.findOneAndDelete(query);
     if (!deleteHealthTip) {
+      return res.status(404).json({ error: " not found" });
+    }
+    res.status(200).json({ message: " deleted successfully" });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Failed to delete" });
+  }
+};
+const deleteMedicine = async (req, res) => {
+  try {
+    const { medicinename } = req.params;
+    const query = { medicinename };
+
+    const deleteMedicine = await Medicine.findOneAndDelete(query);
+    if (!deleteMedicine) {
       return res.status(404).json({ error: " not found" });
     }
     res.status(200).json({ message: " deleted successfully" });
@@ -376,5 +443,9 @@ module.exports = {
   getPatients,
   getPatientsByDoctorName,
   createReview,
-  getReviews
+  getReviews,
+  getMedicines,
+  handleNewMedicine,
+  getHealthTips,
+  deleteMedicine
 };
