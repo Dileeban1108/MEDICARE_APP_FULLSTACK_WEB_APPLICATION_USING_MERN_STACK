@@ -7,14 +7,13 @@ import PatientsModal from "../components/PatientsModel";
 import AddHealthTips from "../components/AddHealthTips";
 import AddMedicines from "../components/AddMedicines";
 import axios from "axios";
-const DoctorHome = () => {
+const DoctorHome = ({doctorDetails}) => {
   const navigate = useNavigate();
   const [showDiseaseModal, setShowDiseaseModal] = useState(false);
   const [showHospitalModal, setShowHospitalModal] = useState(false);
   const [showPatientsModal, setShowPatientsModal] = useState(false);
   const [showHealthTipModal, setShowHealthTipModal] = useState(false);
   const [showMedicineModal, setShowMedicineModal] = useState(false);
-  const [doctorDetails, setDoctorDetails] = useState({});
 
   const handleAddDiseaseClick = () => {
     setShowDiseaseModal(true);
@@ -51,32 +50,12 @@ const DoctorHome = () => {
   const handleClosePatientsModal = () => {
     setShowPatientsModal(false);
   };
-  useEffect(() => {
-    const fetchDoctorDetails = async () => {
-      try {
-        const userinfo = JSON.parse(localStorage.getItem("userinfo"));
-        const email = userinfo?.email;
-        if (email) {
-          console.log(`Fetching doctor details for email: ${email}`);
-          const response = await axios.get(
-            `http://localhost:3001/auth/getDoctor/${email}`
-          );
-          setDoctorDetails(response.data);
-        } else {
-          console.log("No email found in localStorage.");
-        }
-      } catch (error) {
-        console.error("Failed to fetch doctor details", error);
-      }
-    };
 
-    fetchDoctorDetails();
-  }, []);
   return (
     <div className="doctor-home">
       <div className="doctor-home-main-container">
         <div className="doctor-name-container">
-          <h1>Welcome Dr. {doctorDetails.username?.toUpperCase()}</h1>
+          <h1>Welcome</h1>
         </div>
         <div className="doctor-home-container">
           <div className="doctor-home-box" onClick={handleSeePatientsClick}>

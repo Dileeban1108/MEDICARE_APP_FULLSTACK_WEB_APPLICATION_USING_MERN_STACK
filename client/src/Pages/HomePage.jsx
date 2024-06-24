@@ -9,7 +9,10 @@ import ReviewPage from "./ReviewPage";
 import HospitalListModal from "../components/HospitalListModel"; // Ensure the correct path
 import DoctorHome from "./DoctorHome";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faArrowRight, faMapMarkerAlt } from "@fortawesome/free-solid-svg-icons";
+import {
+  faArrowRight,
+  faMapMarkerAlt,
+} from "@fortawesome/free-solid-svg-icons";
 import axios from "axios";
 
 const HomePage = () => {
@@ -21,7 +24,9 @@ const HomePage = () => {
   useEffect(() => {
     const fetchHospitals = async () => {
       try {
-        const result = await axios.get("http://localhost:3001/auth/getHospitals");
+        const result = await axios.get(
+          "http://localhost:3001/auth/getHospitals"
+        );
         setHospitalsData(result.data);
       } catch (error) {
         console.error("Failed to fetch hospitals:", error);
@@ -33,7 +38,9 @@ const HomePage = () => {
         const userinfo = JSON.parse(localStorage.getItem("userinfo"));
         const email = userinfo?.email;
         if (email) {
-          const response = await axios.get(`http://localhost:3001/auth/getDoctor/${email}`);
+          const response = await axios.get(
+            `http://localhost:3001/auth/getDoctor/${email}`
+          );
           setDoctorDetails(response.data);
           setUserRole("doctor");
         }
@@ -67,7 +74,11 @@ const HomePage = () => {
         doctorDetails={doctorDetails}
       />
       {userRole === "doctor" ? (
-        <DoctorHome setUserRole={setUserRole} id="doctor-home" />
+        <DoctorHome
+          setUserRole={setUserRole}
+          doctorDetails={doctorDetails}
+          id="doctor-home"
+        />
       ) : (
         <MainPage id="main" />
       )}
@@ -75,7 +86,7 @@ const HomePage = () => {
         <div className="text">
           <h1>Hospitals</h1>
         </div>
-      
+
         <div className="home-container">
           {hospitalsData.slice(0, 7).map((hospital, index) => (
             <div
@@ -85,7 +96,10 @@ const HomePage = () => {
             >
               <h3>{hospital.hospitalname}</h3>
               <div className="location-icon">
-                <FontAwesomeIcon icon={faMapMarkerAlt} style={{ color: "red" }} />
+                <FontAwesomeIcon
+                  icon={faMapMarkerAlt}
+                  style={{ color: "red" }}
+                />
                 <span>{hospital.address}</span>
               </div>
             </div>
