@@ -10,25 +10,17 @@ const AboutUs = () => {
         </div>
         <div className="content">
           <p>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed
-            gravida, ipsum ac dignissim vehicula, eros eros pretium libero, a
-            ullamcorper lorem arcu et ante. Nullam aliquet, dui sed fermentum
-            malesuada, arcu risus commodo metus, vel ultricies elit nisi a arcu.
-            Cras nec est id ante mattis sagittis ac et sapien. Nullam convallis
-            tincidunt felis, eu tristique libero commodo a. Nullam blandit
-            dictum felis sed vulputate.
-          </p>
-          <p>
-            In hac habitasse platea dictumst. Mauris id tristique purus, sed
-            viverra neque. Aliquam auctor mauris vel erat ultricies, et posuere
-            justo fermentum. Ut in mauris a justo tincidunt suscipit. Nullam ut
-            ipsum id augue congue accumsan vitae non mauris. Donec id purus ut
-            nunc faucibus cursus. Vestibulum rutrum, risus ac imperdiet euismod,
-            felis risus feugiat ante, nec hendrerit ex risus id ante. Aliquam
-            erat volutpat. Morbi id ultricies mauris. In auctor justo vel sapien
-            euismod, at elementum nisl eleifend. Aliquam auctor eros id volutpat
-            feugiat. Nullam vitae nisl semper, eleifend ipsum id, venenatis
-            justo.
+            Welcome to Medical app, where innovation meets healthcare. Our
+            mission is to revolutionize the way you manage your health by
+            providing accessible, efficient, and personalized medical solutions.
+            We combine the expertise of top healthcare professionals with
+            cutting-edge technology to bring you a comprehensive platform for
+            all your health needs.Our app offers personalized health insights, a
+            powerful symptom checker, virtual consultations, medication
+            management, and easy access to your health records. We prioritize
+            patient-centric care, ensuring our services are user-friendly and
+            supportive. With a strong commitment to privacy and security, we
+            protect your personal health information with the highest standards.
           </p>
         </div>
       </div>

@@ -28,6 +28,7 @@
   width: 100%;
   transition: transform 0.5s ease;
   height: auto;
+  object-fit: cover;
 }
 
 .image-container img.active {

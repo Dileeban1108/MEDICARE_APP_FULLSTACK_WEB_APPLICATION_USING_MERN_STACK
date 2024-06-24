@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import "../styles/patientsModel.css";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const PatientsModal = ({ onClose }) => {
   const [allPatients, setAllPatients] = useState([]);
@@ -15,7 +17,9 @@ const PatientsModal = ({ onClose }) => {
         const email = userinfo?.email;
         if (email) {
           console.log(`Fetching doctor details for email: ${email}`);
-          const response = await axios.get(`http://localhost:3001/auth/getDoctor/${email}`);
+          const response = await axios.get(
+            `http://localhost:3001/auth/getDoctor/${email}`
+          );
           console.log("Doctor details fetched:", response.data);
           setDoctorDetails(response.data);
         } else {
@@ -32,28 +36,27 @@ const PatientsModal = ({ onClose }) => {
   useEffect(() => {
     const fetchPatients = async () => {
       try {
-        const allPatientsResponse = await axios.get("http://localhost:3001/auth/getPatients");
+        const allPatientsResponse = await axios.get(
+          "http://localhost:3001/auth/getPatients"
+        );
         console.log("All patients fetched:", allPatientsResponse.data);
         const patients = allPatientsResponse.data || [];
 
-        // Filter booked patients based on doctor's username
-        if (doctorDetails.username) {
-          const bookedPatientsData = patients.filter(patient => patient.doctername === doctorDetails.username);
-          console.log("Booked patients filtered:", bookedPatientsData);
+        setAllPatients(patients);
 
-          setBookedPatients(bookedPatientsData);
+        const bookedPatientsResponse = await axios.get(
+          `http://localhost:3001/auth/getPatients/${doctorDetails.username}`
+        );
+        console.log("Booked patients fetched:", bookedPatientsResponse.data);
+        let bookedPatients = bookedPatientsResponse.data || [];
 
-          // Set up initial message state for booked patients
-          const initialMessages = {};
-          bookedPatientsData.forEach(patient => {
-            if (patient && patient.username) {
-              initialMessages[patient.username] = "";
-            }
-          });
-          setMessages(initialMessages);
+        // Ensure bookedPatients is an array
+        if (!Array.isArray(bookedPatients)) {
+          bookedPatients = [bookedPatients];
         }
 
-        setAllPatients(patients);
+        setBookedPatients(bookedPatients);
+
       } catch (error) {
         console.error("Failed to fetch patients", error);
       }
@@ -64,10 +67,10 @@ const PatientsModal = ({ onClose }) => {
     }
   }, [doctorDetails]);
 
-  const handleMessageChange = (e, patientUsername) => {
+  const handleMessageChange = (e, username) => {
     setMessages({
       ...messages,
-      [patientUsername]: e.target.value,
+      [username]: e.target.value,
     });
   };
 
@@ -75,13 +78,13 @@ const PatientsModal = ({ onClose }) => {
     const message = messages[patientUsername];
     try {
       await axios.post("http://localhost:3001/email/sendEmail", {
-        email: patientEmail,
-        message,
+        userEmail: patientEmail,
+        message: message,
       });
-      alert(`Message sent to ${patientUsername}: ${message}`);
+      toast.success("Successfully sent the message");
     } catch (error) {
-      console.error("Failed to send message", error);
-      alert("Failed to send message");
+      toast.error("Failed to sent the message");
+
     }
   };
 
@@ -99,7 +102,7 @@ const PatientsModal = ({ onClose }) => {
             <h3>Patients Who Booked You</h3>
             <div className="patients-list_2">
               {bookedPatients.length > 0 ? (
-                bookedPatients.map((patient, index) => (
+                bookedPatients.map((patient, index) =>
                   patient && patient.username ? (
                     <div key={index} className="patient-box_2">
                       <h3>{patient.username}</h3>
@@ -113,11 +116,17 @@ const PatientsModal = ({ onClose }) => {
                           value={messages[patient.username] || ""}
                           onChange={(e) => handleMessageChange(e, patient.username)}
                         />
-                        <button onClick={() => handleSendMessage(patient.username, patient.email)}>Send</button>
+                        <button
+                          onClick={() =>
+                            handleSendMessage(patient.username, patient.email)
+                          }
+                        >
+                          Send
+                        </button>
                       </div>
                     </div>
                   ) : null
-                ))
+                )
               ) : (
                 <p>No patients have booked you.</p>
               )}
@@ -127,7 +136,7 @@ const PatientsModal = ({ onClose }) => {
             <h3>All Patients</h3>
             <div className="patients-list_2">
               {allPatients.length > 0 ? (
-                allPatients.map((patient, index) => (
+                allPatients.map((patient, index) =>
                   patient && patient.username ? (
                     <div key={index} className="patient-box_2">
                       <h3>{patient.username}</h3>
@@ -135,7 +144,7 @@ const PatientsModal = ({ onClose }) => {
                       <p>Age: {patient.age}</p>
                     </div>
                   ) : null
-                ))
+                )
               ) : (
                 <p>No patients available.</p>
               )}
