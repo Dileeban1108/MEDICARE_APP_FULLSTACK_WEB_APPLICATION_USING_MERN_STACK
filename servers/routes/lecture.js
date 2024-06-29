@@ -1,0 +1,30 @@
+const express = require("express");
+const router = express.Router();
+const lectureController = require("../controllers/lectureController");
+
+router.get('/getLecturer/:department', lectureController.getLecturer);
+router.get('/getLecturers/:email', lectureController.getLecturerByEmail);
+router.get('/getWelfare/:email', lectureController.getStudentWelfareByEmail);
+router.get('/getCourse/:department', lectureController.getCourses);
+router.get('/getAssignment/:department', lectureController.getAssignment);
+router.get('/getSheduledExams/:department', lectureController.getExams);
+router.post('/createCourse', lectureController.handleNewCourse);
+router.post('/createAdvancedCourse', lectureController.handleNewAdvancedCourse);
+router.post('/createClub', lectureController.handleNewClub);
+router.post('/createScholarship', lectureController.handleNewScholarship);
+router.post('/createAssignment', lectureController.handleNewAssignment);
+router.post('/createAnnouncement', lectureController.handleNewAnnouncement);
+router.post('/createExam', lectureController.handleNewExam);
+router.post('/enrollCourse', lectureController.handleNewEnrolledCourse);
+router.get('/getEnrolledCourses/:email', lectureController.getEnrolledCourses);
+router.delete('/removeEnrolledCourse/:coursecode', lectureController.removeEnrolledCourse);
+router.post('/createGrade', lectureController.createGrade);
+router.delete('/deleteGrade/:studentnumber', lectureController.deleteStudentGrade);
+router.delete('/deleteScholarship/:name', lectureController.deleteScholarship);
+router.delete('/deleteClub/:name', lectureController.deleteClub);
+router.delete('/deleteAdvancedCourse/:name', lectureController.deleteAdvancedCourse);
+router.put('/updateGrade/:email', lectureController.updateStudentGrade);
+router.get('/getGrade/:studentnumber', lectureController.getStudentGrade);
+router.get('/getGrades/:department', lectureController.getStudentGradeByDepartment);
+
+module.exports = router;
