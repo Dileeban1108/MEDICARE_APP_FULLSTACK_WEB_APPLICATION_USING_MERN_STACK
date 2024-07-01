@@ -104,6 +104,7 @@ const BuyMedicine = () => {
       toast.success(
         "Purchase successful! You will get medicines within today."
       );
+      navigate('/')
     } catch (error) {
       console.error("Failed to complete purchase", error);
       toast.error("Failed to complete purchase");
