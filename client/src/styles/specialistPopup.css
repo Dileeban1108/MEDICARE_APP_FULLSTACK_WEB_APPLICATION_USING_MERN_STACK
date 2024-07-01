@@ -20,6 +20,7 @@
   position: relative;
   display: flex;
   flex-direction: column;
+  color: #007BFF;
 }
 .button-container_5{
 display: flex;

@@ -27,11 +27,26 @@ const Register = () => {
     "Dentist",
     "Veterinarian",
     "Radiologist",
-    "Physiotherapist"
+    "Physiotherapist",
   ];
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    const phoneRegex = /^\d{10}$/;
+    if (!phoneRegex.test(phone)) {
+      toast.error("Phone number must be exactly 10 digits");
+      return;
+    }
+
+    // Password validation
+    const passwordRegex =
+      /^(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*(),.?":{}|<>]).{8,}$/;
+    if (!passwordRegex.test(password)) {
+      toast.error(
+        "Password must be at least 8 characters long, contain at least one lowercase letter, one uppercase letter, and one special character"
+      );
+      return;
+    }
     try {
       const response = await axios.post("http://localhost:3001/register", {
         username,

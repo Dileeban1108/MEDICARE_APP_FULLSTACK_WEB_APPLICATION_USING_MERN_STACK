@@ -19,6 +19,7 @@
     max-height: 80vh;
     overflow-y: auto;
     position: relative;
+    color: #007bff;
   }
   
   .button-container_4 {

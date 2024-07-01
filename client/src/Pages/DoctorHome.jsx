@@ -7,7 +7,7 @@ import PatientsModal from "../components/PatientsModel";
 import AddHealthTips from "../components/AddHealthTips";
 import AddMedicines from "../components/AddMedicines";
 import axios from "axios";
-const DoctorHome = ({doctorDetails}) => {
+const DoctorHome = ({ doctorDetails, userRole }) => {
   const navigate = useNavigate();
   const [showDiseaseModal, setShowDiseaseModal] = useState(false);
   const [showHospitalModal, setShowHospitalModal] = useState(false);
@@ -54,9 +54,12 @@ const DoctorHome = ({doctorDetails}) => {
   return (
     <div className="doctor-home">
       <div className="doctor-home-main-container">
-        <div className="doctor-name-container">
-          <h1>Welcome</h1>
-        </div>
+        {userRole === "doctor" && (
+          <div className="doctor-name-container">
+            <h1>Welcome Dr.{doctorDetails.username.toUpperCase()}</h1>
+          </div>
+        )}
+
         <div className="doctor-home-container">
           <div className="doctor-home-box" onClick={handleSeePatientsClick}>
             <h2>See Patients</h2>
@@ -88,9 +91,7 @@ const DoctorHome = ({doctorDetails}) => {
       {showHealthTipModal && (
         <AddHealthTips onClose={handleCloseHealthTipModal} />
       )}
-      {showMedicineModal && (
-        <AddMedicines onClose={handleCloseMedicineModal} />
-      )}
+      {showMedicineModal && <AddMedicines onClose={handleCloseMedicineModal} />}
     </div>
   );
 };

@@ -14,14 +14,27 @@ const ServicesPage = () => {
   const [showHealthTipsPopup, setShowHealthTipsPopup] = useState(false);
   const [showPharmacyPopup, setShowPharmacyPopup] = useState(false);
   const [userRole, setUserRole] = useState(null);
+  const [medicines, setMedicines] = useState([]);
   useEffect(() => {
-
+    const queryParams = new URLSearchParams(location.search);
+    const initialMedicine = {
+      medicinename: queryParams.get("medicinename"),
+      quantity: parseInt(queryParams.get("quantity")) || 1,
+      unit: queryParams.get("unit") || "pills",
+    };
+    if (initialMedicine.medicinename) {
+      setMedicines([initialMedicine]);
+    }
+  }, [location.search]);
+  useEffect(() => {
     const fetchDoctorDetails = async () => {
       try {
         const userinfo = JSON.parse(localStorage.getItem("userinfo"));
         const email = userinfo?.email;
         if (email) {
-          const response = await axios.get(`http://localhost:3001/auth/getDoctor/${email}`);
+          const response = await axios.get(
+            `http://localhost:3001/auth/getDoctor/${email}`
+          );
           setUserRole("doctor");
         }
       } catch (error) {
@@ -63,7 +76,10 @@ const ServicesPage = () => {
   const handleClosePharmacyPopup = () => {
     setShowPharmacyPopup(false);
   };
-
+  const handleAddMedicine = (medicine) => {
+    setMedicines((prevMedicines) => [...prevMedicines, medicine]);
+    setShowPharmacyPopup(false); // Close popup after adding medicine
+  };
   return (
     <section className="services">
       <div className="text">
@@ -97,7 +113,9 @@ const ServicesPage = () => {
         <div className="service-box box5" onClick={handlePharmacyClick}>
           <h2>Pharmacy</h2>
           <p>Get all the medicines you want.</p>
-          <h3 style={{color:"red",background:"white"}}>Please use the pharmacy with a recomendation of a doctor.</h3>
+          <h3 style={{ color: "red", background: "white" }}>
+            Please use the pharmacy with a recomendation of a doctor.
+          </h3>
         </div>
       </div>
       {showDiseasePopup && <DiseasePopup onClose={handleCloseDiseasePopup} />}
@@ -108,7 +126,10 @@ const ServicesPage = () => {
         <HealthTipsPopup onClose={handleCloseHealthTipsPopup} />
       )}
       {showPharmacyPopup && (
-        <PharmacyPopup onClose={handleClosePharmacyPopup} />
+        <PharmacyPopup
+          onClose={handleClosePharmacyPopup}
+          onAddMedicine={handleAddMedicine}
+        />
       )}
     </section>
   );

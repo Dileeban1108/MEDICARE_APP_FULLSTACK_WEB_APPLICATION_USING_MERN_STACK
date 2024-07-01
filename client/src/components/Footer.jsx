@@ -1,7 +1,6 @@
 import React from "react";
 import "../styles/footer.css";
-// import { FaFacebook, FaInstagram } from "react-icons/fa";
-// import { AiOutlineGoogle } from "react-icons/ai";
+import { FaFacebook, FaInstagram ,FaPhone } from "react-icons/fa";
 import { NavLink } from "react-router-dom";
 
 const Footer = () => {
@@ -9,10 +8,9 @@ const Footer = () => {
     <footer className="footer">
       <section className="footer-content">
         <div className="footer__section">
-          <h5 className="footer__heading"> Join Us Today</h5>
+          <h5 className="footer__heading">Join Us Today</h5>
           <p>
-            Empower minds and embrace new learning opportunities with [Website
-            Name]. Join us in shaping the future of education!
+            Empower minds and embrace new learning opportunities with Medicare App. Join us in shaping the future of education!
           </p>
         </div>
         <div className="container_1">
@@ -37,23 +35,25 @@ const Footer = () => {
         </div>
 
         <div className="container_1">
-          <h5 className="footer__heading">Contact Me</h5>
+          <h5 className="footer__heading">Contact Us</h5>
           <ul className="icons-list">
             <NavLink to="">
-              {/* <FaFacebook /> */}
+              <FaFacebook />
             </NavLink>
             <NavLink to="">
-              {/* <FaInstagram /> */}
+              <FaInstagram />
             </NavLink>
+            or
             <NavLink to="">
-              {/* <AiOutlineGoogle /> */}
+              <FaPhone />:+94 76 456 3333
             </NavLink>
+
           </ul>
         </div>
       </section>
 
       <div className="footer__copyright">
-        &copy; {new Date().getFullYear()} All Rights Reserved!..
+        &copy; {new Date().getFullYear()} All Rights Reserved!
       </div>
     </footer>
   );
