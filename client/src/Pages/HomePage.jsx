@@ -75,7 +75,7 @@ const HomePage = () => {
       />
       {userRole === "doctor" ? (
         <DoctorHome
-          setUserRole={setUserRole}
+        userRole={userRole}
           doctorDetails={doctorDetails}
           id="doctor-home"
         />

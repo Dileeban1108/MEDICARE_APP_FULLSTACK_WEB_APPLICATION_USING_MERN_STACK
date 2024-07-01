@@ -56,19 +56,19 @@
 }
 
 .nav-links li:hover {
-  color: #007BFF;
-  border-bottom: 2px solid #007BFF; 
+  border-bottom: 2px solid #ffffff; 
 }
-.nav-links li:last-child {
+.last_child{
+  color: #ddd;
   background-color: #007BFF;
-  padding: .5rem 1rem;
+  padding: 10px;
   border-radius: 5px;
-  color: #ffffff;
+  transition: .5s all ease;
 }
-.nav-links li:last-child:hover {
-  color: #008cff;
+.last_child:hover{
+  color: #057eff;
+  background-color: #ffffff;
 }
-
 .profile-icon {
   position: relative;
   cursor: pointer;
@@ -94,12 +94,20 @@
   align-items: center;
   gap: 0.5rem;
   height: 40px;
+  color: #0088ff;
+  justify-content: space-between;
+  box-shadow: 0 0 5px gray;
+  border-radius: 5px;
+  padding: 5px;
 }
 .name-email{
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  color: #016fff;
+  box-shadow: 0 0 2px gray;
+  padding: 5px;
 }
 .profile-dropdown p:hover {
   background-color: #f0f0f0;
@@ -129,7 +137,7 @@
   .nav-links {
     display: none;
     flex-direction: column;
-    width: 40%;
+    width: 100%;
     background-color:#007BFF;
     position: absolute;
     top: 100%;
@@ -154,7 +162,7 @@
   }
   .nav-links li:last-child {
     background-color: #ffffff;
-    color: #007BFF;
+    color: #007bff;
   }
   .nav-links li:last-child:hover {
     color: #0088ff;

@@ -13,6 +13,10 @@
   background-size: cover;
 }
 
+.cancel-button{
+  height: 40px;
+}
+
 @media screen and (max-width: 800px) {
   .medicine-details,
   .card-details {

@@ -19,6 +19,7 @@
   width: 500px;
   position: relative;
   z-index: 10000;
+  color: #007bff;
 }
 .button-container_2 {
   display: flex;

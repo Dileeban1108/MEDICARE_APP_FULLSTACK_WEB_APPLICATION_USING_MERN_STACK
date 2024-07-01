@@ -93,13 +93,10 @@ const NavBar = ({
                 {showProfile && doctorDetails && (
                   <div className="profile-dropdown">
                     <div className="name-email">
-                      <h3>{doctorDetails.username}</h3>
+                      <h4>{doctorDetails.username}</h4>
                       <h5>{doctorDetails.email}</h5>
+                      <h6> {doctorDetails.hospital}</h6>
                     </div>
-                    <p>
-                      <FontAwesomeIcon icon={faHospital} />{" "}
-                      {doctorDetails.hospital}
-                    </p>
                     <p onClick={handleUpdateProfileClick}>
                       <FontAwesomeIcon icon={faEdit} /> Update Profile
                     </p>
@@ -112,6 +109,7 @@ const NavBar = ({
             ) : (
               <li>
                 <RouterLink
+                className="last_child"
                   to="/bookdoctor"
                   style={{ textDecoration: "none"}}
                   onClick={toggleMobileMenu}

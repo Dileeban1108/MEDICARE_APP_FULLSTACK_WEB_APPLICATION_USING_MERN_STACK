@@ -1,15 +1,13 @@
-// BuyMedicine.js
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import axios from "axios";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import "../styles/buyMedicine.css";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import cardImage from "../assets/card.png";
-import PharmacyPopup from "../components/PharmacyPopup";
+import PharmacyPopup2 from "../components/PharmacyPopup2";
 
 const BuyMedicine = () => {
-  const location = useLocation();
   const navigate = useNavigate();
   const [showPharmacyPopup, setShowPharmacyPopup] = useState(false);
   const [medicines, setMedicines] = useState([]);
@@ -17,18 +15,6 @@ const BuyMedicine = () => {
   const [expiryDate, setExpiryDate] = useState("");
   const [cvv, setCvv] = useState("");
   const [amount, setAmount] = useState("");
-
-  useEffect(() => {
-    const queryParams = new URLSearchParams(location.search);
-    const initialMedicine = {
-      medicinename: queryParams.get("medicinename"),
-      quantity: parseInt(queryParams.get("quantity")) || 1,
-      unit: queryParams.get("unit") || "pills",
-    };
-    if (initialMedicine.medicinename) {
-      setMedicines([initialMedicine]);
-    }
-  }, [location.search]);
 
   const handleAddMedicine = (medicine) => {
     setMedicines((prevMedicines) => [...prevMedicines, medicine]);
@@ -44,38 +30,90 @@ const BuyMedicine = () => {
 
   const handleExpiryDateChange = (e) => {
     let input = e.target.value;
-    // Remove non-numeric characters
-    input = input.replace(/\D/g, '');
-    
-    // Add a slash after the first two characters if more than two characters are entered
+    input = input.replace(/\D/g, "");
+
     if (input.length > 2) {
-      input = input.slice(0, 2) + '/' + input.slice(2);
+      input = input.slice(0, 2) + "/" + input.slice(2);
     }
-    
+
     setExpiryDate(input);
   };
 
   const encryptCVV = (cvv) => {
-    // Example: Encrypt CVV (this should be replaced with your actual encryption logic)
-    return cvv.split('').map(() => '*').join('');
+    return cvv.split("").map(() => "*").join("");
+  };
+
+  const validateCardNumber = (number) => {
+    const regex = /^\d{16}$/;
+    return regex.test(number);
+  };
+
+  const validateExpiryDate = (date) => {
+    const regex = /^(0[1-9]|1[0-2])\/?([0-9]{2})$/;
+    if (!regex.test(date)) return false;
+    
+    const [month, year] = date.split("/").map(Number);
+    const now = new Date();
+    const currentMonth = now.getMonth() + 1;
+    const currentYear = now.getFullYear() % 100;
+
+    if (year < currentYear || (year === currentYear && month < currentMonth)) {
+      return false;
+    }
+    return true;
+  };
+
+  const validateCVV = (cvv) => {
+    const regex = /^\d{3,4}$/;
+    return regex.test(cvv);
   };
 
   const handlePurchase = async () => {
+    if (!validateCardNumber(cardNumber)) {
+      toast.error("Invalid card number. Please enter a 16-digit card number.");
+      return;
+    }
+
+    if (!validateExpiryDate(expiryDate)) {
+      toast.error("Invalid expiry date. Please enter a valid MM/YY format and ensure it's a future date.");
+      return;
+    }
+
+    if (!validateCVV(cvv)) {
+      toast.error("Invalid CVV. Please enter a 3 or 4-digit CVV.");
+      return;
+    }
+
     try {
       const encryptedCVV = encryptCVV(cvv);
 
-      await axios.post("http://localhost:3001/purchaseRoutes/purchaseMedicines", {
+      const purchaseData = {
         cardNumber,
         expiryDate,
         cvv: encryptedCVV,
         amount,
         medicines,
-      });
-      toast.success("Purchase successful! You will get medicines within today.");
+      };
+
+      console.log("Sending purchase data:", purchaseData);
+
+      await axios.post(
+        "http://localhost:3001/purchaseRoutes/purchaseMedicines",
+        purchaseData
+      );
+      toast.success(
+        "Purchase successful! You will get medicines within today."
+      );
     } catch (error) {
       console.error("Failed to complete purchase", error);
       toast.error("Failed to complete purchase");
     }
+  };
+
+  const handleRemoveMedicine = (index) => {
+    setMedicines((prevMedicines) =>
+      prevMedicines.filter((_, i) => i !== index)
+    );
   };
 
   return (
@@ -87,7 +125,7 @@ const BuyMedicine = () => {
             {medicines.map((med, index) => (
               <li key={index}>
                 <input
-                                  className="input_text"
+                  className="input_text"
                   style={{ width: "96%" }}
                   type="text"
                   value={med.medicinename}
@@ -95,24 +133,36 @@ const BuyMedicine = () => {
                 />
                 <div className="pillsgrams">
                   <input
-                  className="input_number"
+                    className="input_number"
                     type="number"
                     value={med.quantity}
-                    onChange={(e) => handleMedicineChange(index, "quantity", e.target.value)}
+                    onChange={(e) =>
+                      handleMedicineChange(index, "quantity", e.target.value)
+                    }
                   />
                   <select
                     style={{ height: "38px", width: "20%" }}
                     value={med.unit}
-                    onChange={(e) => handleMedicineChange(index, "unit", e.target.value)}
+                    onChange={(e) =>
+                      handleMedicineChange(index, "unit", e.target.value)
+                    }
                   >
                     <option value="pills">Pills</option>
                     <option value="grams">Grams</option>
                   </select>
+                  <button
+                    className="cancel-button"
+                    onClick={() => handleRemoveMedicine(index)}
+                  >
+                    Cancel
+                  </button>
                 </div>
               </li>
             ))}
           </ul>
-          <button onClick={() => setShowPharmacyPopup(true)}>Add Medicine</button>
+          <button onClick={() => setShowPharmacyPopup(true)}>
+            Add Medicine
+          </button>
         </div>
         <div className="card-details">
           <img src={cardImage} alt="Card" className="card-image" />
@@ -131,7 +181,7 @@ const BuyMedicine = () => {
               type="text"
               value={expiryDate}
               onChange={handleExpiryDateChange}
-              maxLength="5" // Limit to 5 characters (MMYY)
+              maxLength="5"
               required
             />
           </div>
@@ -160,7 +210,10 @@ const BuyMedicine = () => {
         </div>
       </div>
       {showPharmacyPopup && (
-        <PharmacyPopup onClose={() => setShowPharmacyPopup(false)} onAddMedicine={handleAddMedicine} />
+        <PharmacyPopup2
+          onClose={() => setShowPharmacyPopup(false)}
+          onAddMedicine={handleAddMedicine}
+        />
       )}
       <ToastContainer />
     </div>

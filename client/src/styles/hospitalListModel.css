@@ -11,13 +11,14 @@
   z-index: 1000;
 }
 
-.modal-content_2 {
+.modal-content_6 {
   background: white;
   padding: 20px;
   border-radius: 8px;
-  width: 80%;
+  width: 90%;
   height: 80%;
   border: dodgerblue;
+  color: rgb(0, 162, 255);
 }
 
 .button-container_2 {
@@ -31,24 +32,38 @@
 }
 .close-button_10 {
   border: none;
+  width: 50px;
 }
 .hospital-list_3 {
   display: flex;
   flex-direction: column;
   overflow-y: scroll;
   height: 90%;
+  width: auto;
 }
 
 .hospital-box_3 {
-  border: 1px solid #ddd;
   padding: 10px;
   margin: 10px 0;
   border-radius: 4px;
   display: flex;
   justify-content: space-between;
   align-items: center;
+  width: auto;
+  overflow-x: scroll;
+  box-shadow: 0 0 2px rgb(0, 110, 255);
 }
-
+@media screen and (max-width: 730px) {
+  .hospital-box_3 h4 {
+    font-size: 13px;
+  }
+  .hospital-box_3 .address {
+    font-size: 12px;
+  }
+  .number {
+   font-size: 10px;
+  }
+}
 .location-icon_2 {
   display: flex;
   align-items: center;
@@ -59,4 +74,8 @@
 
 .number {
   margin-left: 10px;
+  width: 120px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }

@@ -56,9 +56,19 @@ const PharmacyPopup = ({ onClose, onAddMedicine }) => {
   };
 
   // Handle adding medicine to cart
-  const handleBuy = () => {
+  const handleBuy = (medicineId) => {
+    const selectedMedicine = medicines.find((med) => med._id === medicineId);
+    if (selectedMedicine) {
+      onAddMedicine({
+        medicinename: selectedMedicine.medicinename,
+        quantity: 1,
+        unit: "pills",
+      });
       navigate('/buymedicine')
       onClose(); // Close the popup after buying medicine
+    } else {
+      toast.error("Failed to add medicine to cart");
+    }
   };
 
   // Handle deleting medicine
@@ -96,13 +106,13 @@ const PharmacyPopup = ({ onClose, onAddMedicine }) => {
               placeholder="Enter medicine name here..."
             />
           </div>
-          <button onClick={() => handleBuy()} style={{marginBottom:"10px", width:"100%"}}>Go To Shop</button>
           <div className="medicine-list">
             {filteredMedicines.length > 0 ? (
               filteredMedicines.map((medicine, index) => (
                 <div key={index} className="medicine-box">
                   <h3>{medicine.medicinename}</h3>
                   <p>Available Quantity: {medicine.quantity}</p>
+                  <button onClick={() => handleBuy(medicine._id)}>Buy</button>
                   {userRole === "doctor" && (
                     <button
                       style={{ height: "40px" }}
