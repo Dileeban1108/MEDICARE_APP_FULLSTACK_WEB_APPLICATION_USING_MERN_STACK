@@ -7,7 +7,7 @@ A medical application built with the MERN stack.
 - Doctors can add medicines,hospitals,disease
 - user can buy and get medicines online
 - Real-time notifications and messaging individually
-**(login as a doctr to view more functionalities)**
+**(login as a doctor to view more functionalities)**
   
 ## Technologies Used
 - **MongoDB**: Database
