@@ -54,11 +54,14 @@ const DoctorHome = ({ doctorDetails, userRole }) => {
   return (
     <div className="doctor-home">
       <div className="doctor-home-main-container">
-        {userRole === "doctor" && (
-          <div className="doctor-name-container">
-            <h1>Welcome Dr.{doctorDetails.username.toUpperCase()}</h1>
-          </div>
-        )}
+        <div className="doctor-name-container">
+          <h1>
+            Welcome Dr.
+            {userRole === "doctor" && doctorDetails
+              ? doctorDetails.username.toUpperCase()
+              : ""}
+          </h1>
+        </div>
 
         <div className="doctor-home-container">
           <div className="doctor-home-box" onClick={handleSeePatientsClick}>

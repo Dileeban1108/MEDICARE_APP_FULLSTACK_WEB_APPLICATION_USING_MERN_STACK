@@ -4,6 +4,7 @@ import "../styles/pharmacyPopup.css";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useNavigate } from "react-router-dom";
+import { jwtDecode } from "jwt-decode";
 
 const PharmacyPopup = ({ onClose, onAddMedicine }) => {
   const [searchTerm, setSearchTerm] = useState("");
@@ -16,10 +17,18 @@ const PharmacyPopup = ({ onClose, onAddMedicine }) => {
   useEffect(() => {
     const fetchDoctorDetails = async () => {
       try {
-        const userinfo = JSON.parse(localStorage.getItem("userinfo"));
-        const email = userinfo?.email;
+        const accessToken = localStorage.getItem("accessToken");
+        const decoded = jwtDecode(accessToken); // Use jwtDecode correctly
+        const email = decoded?.userInfo?.email;
         if (email) {
-          await axios.get(`http://localhost:3001/auth/getDoctor/${email}`);
+          const response = await axios.get(
+            `http://localhost:3001/auth/getDoctor/${email}`, // Use email in the URL
+          {
+            headers: {
+              Authorization: `Bearer ${accessToken}`, // Include the access token
+            },
+          }
+          );
           setUserRole("doctor");
         }
       } catch (error) {

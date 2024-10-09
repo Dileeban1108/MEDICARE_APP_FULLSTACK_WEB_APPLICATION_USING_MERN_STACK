@@ -48,21 +48,22 @@ const Register = () => {
       return;
     }
     try {
-      const response = await axios.post("http://localhost:3001/register", {
-        username,
-        email,
-        password,
-        phone,
-        address,
-        regnumber,
-        hospital,
-        specialization,
-      });
+      const response = await axios.post(
+        "http://localhost:3001/register/newDoctor",
+        {
+          username,
+          email,
+          password,
+          phone,
+          address,
+          regnumber,
+          hospital,
+          specialization,
+        }
+      );
       if (response && response.data.success) {
         toast.success("Successfully created an account!");
-        setTimeout(() => {
-          navigate("/login");
-        }, 2000);
+        navigate("/login");
       } else {
         toast.error(response.data.message || "Something went wrong");
       }

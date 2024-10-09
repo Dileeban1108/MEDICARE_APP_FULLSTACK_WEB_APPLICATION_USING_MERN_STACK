@@ -13,15 +13,14 @@ const Login = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.post("http://localhost:3001/auth/login", {
+      const response = await axios.post("http://localhost:3001/auth/login", {
         email,
         password,
       });
-      localStorage.setItem("userinfo", JSON.stringify({ email: email }));
-      setTimeout(() => {
-        navigate("/");
-        toast.success("Successfully logged in!");
-      }, 2000);
+      const { accessToken } = response.data;
+      localStorage.setItem("accessToken", accessToken);
+      navigate("/");
+      toast.success("Successfully logged in!");
     } catch (error) {
       toast.error("Login failed. Please check your credentials.");
     }

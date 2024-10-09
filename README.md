@@ -1,5 +1,4 @@
-# Medicare App
-
+## Medicare App
 A medical application built with the MERN stack.
 (Final source codes are in the branch_1 branch)
 ## Features
