@@ -3,6 +3,7 @@ import axios from "axios";
 import "../styles/diseasePopup.css";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { jwtDecode } from "jwt-decode";
 
 const DiseasePopup = ({ onClose }) => {
   const [searchTerm, setSearchTerm] = useState("");
@@ -13,11 +14,17 @@ const DiseasePopup = ({ onClose }) => {
   useEffect(() => {
     const fetchDoctorDetails = async () => {
       try {
-        const userinfo = JSON.parse(localStorage.getItem("userinfo"));
-        const email = userinfo?.email;
+        const accessToken = localStorage.getItem("accessToken");
+        const decoded = jwtDecode(accessToken); // Use jwtDecode correctly
+        const email = decoded?.userInfo?.email;
         if (email) {
           const response = await axios.get(
-            `http://localhost:3001/auth/getDoctor/${email}`
+            `http://localhost:3001/auth/getDoctor/${email}`, // Use email in the URL
+          {
+            headers: {
+              Authorization: `Bearer ${accessToken}`, // Include the access token
+            },
+          }
           );
           setUserRole("doctor");
         }

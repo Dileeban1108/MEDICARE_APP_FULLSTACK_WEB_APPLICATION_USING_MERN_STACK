@@ -86,7 +86,7 @@ const ProfileModal = ({ show, onClose, doctorDetails }) => {
   return (
     <div className="modal-overlay">
       <ToastContainer position="top-right" />
-      <div className="modal-content_6">
+      <div className="modal-content_61">
         <h2>Update Profile</h2>
         <form onSubmit={handleSubmit}>
           <div className="inputs">

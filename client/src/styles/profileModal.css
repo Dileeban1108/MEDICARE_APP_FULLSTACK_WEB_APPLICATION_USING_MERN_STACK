@@ -10,38 +10,39 @@
     align-items: center;
   }
   
-  .modal-content_6 {
+  .modal-content_61 {
     background: white;
     padding: 20px;
     border-radius: 5px;
-    width: 400px;
+    width: 450px;
     max-width: 100%;
     display: flex;
     flex-direction: column;
     text-align: center;
   }
-  .modal-content_6 .inputs{
+  .modal-content_61 .inputs{
     display: flex;
     justify-content: space-around;
     align-items: center;
   }
-  .modal-content_6 h2 {
+  .modal-content_61 h2 {
     margin-top: 0;
     margin-bottom: 1rem;
   }
   
-  .modal-content_6 form {
+  .modal-content_61 form {
     display: flex;
     flex-direction: column;
   }
   
-  .modal-content_6 label {
+  .modal-content_61 label {
     margin-bottom: 10px;
     width: 30%;
+    font-size: 13px;
   }
   
-  .modal-content_6 input,
-  .modal-content_6 select {
+  .modal-content_61 input,
+  .modal-content_61 select {
     margin-bottom: 10px;
     padding: 8px;
     border-radius: 4px;
@@ -49,7 +50,7 @@
     width: 60%;
   }
   
-  .modal-content_6 button {
+  .modal-content_61 button {
     padding: 10px;
     border: none;
     border-radius: 4px;
@@ -57,17 +58,17 @@
     margin-top: 10px;
   }
   
-  .modal-content_6 button[type="submit"] {
+  .modal-content_61 button[type="submit"] {
     background-color: #007bff;
     color: white;
   }
-  .modal-content_6 button[type="submit"]:hover{
+  .modal-content_61 button[type="submit"]:hover{
     background-color: #003b7a;
   }
-  .modal-content_6 button[type="button"] {
+  .modal-content_61 button[type="button"] {
     background-color: #6c757d;
     color: white;
   }
-  .modal-content_6 button[type="button"]:hover{
+  .modal-content_61 button[type="button"]:hover{
     background-color: #505152;
   }

@@ -25,7 +25,7 @@ const NavBar = ({
   };
 
   const handleLogout = () => {
-    localStorage.removeItem("userinfo");
+    localStorage.removeItem("accessToken");
     window.location.reload();
   };
 

@@ -1,5 +1,4 @@
-# Medicare App
-
+## Medicare App
 A medical application built with the MERN stack.
 ## Features
 - User authentication and authorization
